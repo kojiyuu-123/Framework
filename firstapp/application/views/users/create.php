@@ -1,5 +1,5 @@
 <!--Create user page-->
-
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <main role="main" class="flex-shrink-0">
     <div class="container">
         <h1><?php echo $page_title; ?></h1>

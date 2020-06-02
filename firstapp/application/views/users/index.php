@@ -62,67 +62,48 @@ function showUserInfo(id){
 	}
 }
 
-function checkBox(){
-
-	var users = <?php echo json_encode($users); ?>;
+function confirmCheckBox(){
 	
-	const checkbox=document.getElementsByName("check");
-	
-	var delUser = [];
-	
-	for (let i=0;i<checkbox.length;i++){
-		if(checkbox[i].checked){
-			delUser.push(users[i]["id"]);
+	const ch=document.getElementsByName("check[]");
+	//document.getElementById("memo").innerHTML+=ch;
+	for(let i=0;i<ch.length;i++){
+		if(ch[i].checked){
+			//checked
+			return confirm('Are you sure to delete these checked users?');
 		}
 	}
-	
-	$(document).ready(function(){// load待ち
-		
-
-		$("#deleteButton").click(function(){
-			document.getElementById("memo").innerHTML += "Nothing";
-			var data = {
-				deluser : delUser
-			};
-			
-			$.ajax({
-				type: "get",
-				url: "",
-				data: data
-			})
-			.then(
-				function(){//通信成功時
-					alert("success!");
-				},
-				function(){
-					alert("fault!");
-			});
-		});
-	}
-	);
-	
-	
-//	//表示部分
-//	document.getElementById("memo").innerHTML = "";
-//	if(delUser.length==0){
-//		document.getElementById("memo").innerHTML += "Nothing";
-//	}
-//	else{
-//		for(let i=0;i<delUser.length;i++){
-//			document.getElementById("memo").innerHTML += delUser[i];
-//		}
-//	}
+	alert("Please check the checkbox!");
+	return false;
 }
 
 </script>
 
+<?php
+
+if(!empty($_POST['check'])){
+	$del = $_POST['check'];
+
+	$words=strval($del[0]);
+	for ($i=1;$i<count($del);$i++){
+		$words=$words."_".strval($del[$i]);
+	}
+	
+	$url = site_url("users/deletes/$words");
+	
+	header("location: $url");
+	
+}
+
+?>
+
 <main role="main" class="flex-shrink-0">
   <div class="container">
       <h1><?php echo $page_title; ?></h1>
+      <form action="" method="POST" name="checkbox">
       <table class="table table-striped table-hover" id="userTable">
           <thead>
               <tr>
-              <th scope="col">ChBox</th>
+              <th scope="col">Checkbox</th>
               <th scope="col">#</th>
               <th scope="col">First Name</th>
               <th scope="col">Last Name</th>
@@ -130,30 +111,37 @@ function checkBox(){
               </tr>
           </thead>
           <tbody>
-              <?php foreach ($users as $user): ?>
+              <?php foreach ($users as $user):?>
                   <tr>
-                  <td><input type="checkbox" name="check" ></td>
+                  <td>
+                  	<input type="checkbox" name="check[]" value="<?php echo $user['id']; ?>">
+                  </td>
                   <th scope="row"><?php echo $user["id"]; ?></th><!--$user[id]の番号-->
                   <td><?php echo $user["first_name"]; ?></td>
                   <td><?php echo $user["last_name"]; ?></td>
                   <td>
-                      <!--<a href="#"><button class="btn btn-primary btn-sm">View</button></a>-->
-                      <a href="javascript:showUserInfo('<?php echo $user["id"]; ?>')"><button class="btn btn-primary btn-sm">View</button></a>
-                      <a href="<?php echo site_url("users/update/$user[id]"); ?>"><button class="btn btn-outline-primary btn-sm">Edit</button></a>
-
-                      <a onclick="return confirm('Are you sure to delete this user?')" href="<?php echo site_url("users/delete/$user[id]"); ?>"><button class="btn btn-sm">Delete</button></a>
+                      <button type="button" class="btn btn-primary btn-sm" onclick="javascript:showUserInfo('<?php echo $user["id"]; ?>');">View</button>
+                      <button type="button" onclick="location.href='<?php echo site_url("users/update/$user[id]"); ?>'" class="btn btn-outline-primary btn-sm">Edit</button>
+                      
+                      <button type="button" onclick="if(confirm('Are you sure to delete this user?')) location.href='<?php echo site_url("users/delete/$user[id]"); ?>'" class="btn btn-sm">Delete</button>
                   </td>
                   </tr>
               <?php endforeach; ?>
           </tbody>
       </table>
       
-      <a href="javascript:checkBox()"><button id="deleteButton" class="btn btn-danger">Delete</button></a>
+      <a onclick="return confirmCheckBox();" href=""><button class="btn btn-danger">Delete</button></a>
       <!--
-       <a onclick="return confirm('Are you sure to delete these user?')" href="javascript:checkBox()"><button class="btn btn-danger">Delete</button></a>
+      <a onclick="confirm('Are you sure to delete these users?')" href=""><button class="btn btn-danger">Delete</button></a>
+      
+      <button type="button" onclick="javascript:confirmCheckBox();" class="btn btn-danger">Delete</button>
       -->
+      </form>
+      
   </div>
   
+  <!--
   <p id="memo">memo</p>
+  -->
   
 </main>

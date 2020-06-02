@@ -16,7 +16,7 @@ class Users extends CI_Controller {
 	{
 		$data["users"] = $this->users_model->get_users();
 		
-		$data["page_title"] = "ヒーリングっどプリキュア";
+		$data["page_title"] = "List of Users";
 		
 		$this->load->view('header', $data);
 		

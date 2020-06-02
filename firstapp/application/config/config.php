@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 //$config['base_url'] = 'http://localhost/firstapp';
-$config['base_url'] = 'http://localhost/Framework/firstapp_CodeIgniter-3.1.11';
+$config['base_url'] = 'http://localhost/firstapp';
 
 /*
 |--------------------------------------------------------------------------
