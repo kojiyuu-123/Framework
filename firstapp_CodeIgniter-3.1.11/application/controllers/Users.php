@@ -35,7 +35,9 @@ class Users extends CI_Controller {
 	    $this->form_validation->set_rules('first_name', 'First name', 'required');//required：必須
 	    $this->form_validation->set_rules('last_name', 'Last name', 'required');
 	    $this->form_validation->set_rules('email', 'Email', array('required','valid_email'));//メールアドレスチェック（複数可）
-
+		$this->form_validation->set_rules('phone_number', 'Phone_number', 'required');
+		// 'required' => 'regex_match(/^0[\d]{1,4}(\-)?[\d]{1,5}(\-)?[\d]{1,5}$/)'
+		
 	    if ($this->form_validation->run() === FALSE) {
 	        $this->load->view('header', $data); 
 	        $this->load->view('users/create', $data);
@@ -57,6 +59,7 @@ class Users extends CI_Controller {
 	    $this->form_validation->set_rules('first_name', 'First name', 'required');
 	    $this->form_validation->set_rules('last_name', 'Last name', 'required');
 	    $this->form_validation->set_rules('email', 'Email', array('required','valid_email'));
+	    $this->form_validation->set_rules('phone_number', 'Phone_number', 'required');
 	    if ($this->form_validation->run() === FALSE) {
 	        $this->load->view('header', $data); 
 	        $this->load->view('users/update', $data);
@@ -73,6 +76,19 @@ class Users extends CI_Controller {
 	    redirect(base_url('/'));
 	}
 
+	public function deletes($user_ids)
+	{
+		//文字列でidが送られてくるので、仕切り文字"_"で区切る。
+		$delData = explode("_",$user_ids);
+		//削除するユーザーのidが送られてくる。ここでforをまわせば良い?
+		for ($i=0;$i<count($delData);$i++){
+			$this->users_model->delete_user(intval($delData[$i]));
+		}
+		
+	    redirect(base_url('/'));
+	    
+	}
+
 }
 
-
+?>

@@ -68,16 +68,22 @@ function showUserInfo(id){
 
 if(!empty($_POST['check'])){
 	$del = $_POST['check'];
-
-	$words=strval($del[0]);
-	for ($i=1;$i<count($del);$i++){
-		$words=$words."_".strval($del[$i]);
+	//print_r($del);
+	//echo ("$del = ");
+	
+	//echo "url = ".$url;
+	for ($i=0;$i<count($del);$i++){
+		$url = site_url("users/deletes/$del[$i]");
+		echo "$url<br>";
+		//echo "<script>alert('移動');</script>";
+		header("location: $url");
 	}
 	
-	$url = site_url("users/deletes/$words");
-	
-	header("location: $url");
-	//redirect(base_url('/'));
+	redirect(base_url('/'));
+}
+
+else{
+	//echo "<script>alert('There is no checked check box!');</script>";
 }
 
 ?>
@@ -100,7 +106,7 @@ if(!empty($_POST['check'])){
               <?php foreach ($users as $user):?>
                   <tr>
                   <td>
-                  	<input type="checkbox" name="check[]" value="<?php echo $user['id']; ?>">
+                  	<input type="checkbox" name="check[]" value="<?php echo $user["id"]; ?>">
                   </td>
                   <th scope="row"><?php echo $user["id"]; ?></th><!--$user[id]の番号-->
                   <td><?php echo $user["first_name"]; ?></td>
@@ -109,19 +115,22 @@ if(!empty($_POST['check'])){
                       <button type="button" class="btn btn-primary btn-sm" onclick="javascript:showUserInfo('<?php echo $user["id"]; ?>');">View</button>
                       <button type="button" onclick="location.href='<?php echo site_url("users/update/$user[id]"); ?>'" class="btn btn-outline-primary btn-sm">Edit</button>
                       
-                      <button type="button" onclick="if(confirm('Are you sure to delete this user?')) location.href='<?php echo site_url("users/delete/$user[id]"); ?>'" class="btn btn-sm">Delete</button>
+                      <button type="button" onclick="javascript:if(confirm('Are you sure to delete these users?')) location.href='<?php echo site_url("users/delete/$user[id]"); ?>'" class="btn btn-sm">Delete</button>
                   </td>
                   </tr>
               <?php endforeach; ?>
           </tbody>
       </table>
       
-      <a onclick="confirm('Are you sure to delete these users?')" href=""><button class="btn btn-danger">Delete</button></a>
-      <!--
-      <button type="button" onclick="javascript:confirmCheckBox();" class="btn btn-danger">Delete</button>
-      -->
+      <a onclick="return confirm('Are you sure to delete these users?')" href=""><button class="btn btn-danger">Delete</button></a>
+      
       </form>
       
+      <!--
+      <input type="submit" value="Delete" class="btn btn-danger">
+      <a href="<?php ?>"><button class="btn btn-danger">Delete</button></a>
+       <a onclick="return confirm('Are you sure to delete these user?')" href="javascript:checkBox()"><button class="btn btn-danger">Delete</button></a>
+      -->
   </div>
   
   <p id="memo">memo</p>

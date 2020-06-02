@@ -18,6 +18,10 @@
                 <label for="email">Email</label>
                 <input type="text" class="form-control" name="email" id="email" value="<?php echo $user->email; ?>">
             </div>
+            <div class="form-group">
+                <label for="phone_number">Phone number</label>
+                <input type="text" class="form-control" name="phone_number" id="phone_number" value="<?php echo $user->phone_number; ?>">
+            </div>
             <button type="submit" class="btn btn-primary">Update</button>
         <?php echo form_close(); ?>
     </div>
